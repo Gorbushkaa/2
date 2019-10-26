@@ -3,19 +3,18 @@ from operator import itemgetter
 
 
 class Triangle(object):
-    first = (0, 0)
-    second = (0, 0)
-    third = (0, 0)
 
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self, first, second, third):
+        self.first = first
+        self.second = second
+        self.third = third
 
 
     def square(self):
         s = 0.5 * ((self.first[0]-self.third[0])*(self.second[1]-self.third[1])-(self.second[0]-self.third[0])*(self.first[1]-self.third[1]))
         print(s)
 
-    def check_koor(self, ):
+    def check_koor(self):
         dct = {}
 
         for value in [self.first, self.second, self.third]:
@@ -24,25 +23,63 @@ class Triangle(object):
             dct[a] = dot
         print((sorted(dct.items(), key=itemgetter(1)))[0][0])
 
-    def open_file(self):
-        with open(self.file_name, "r") as f:
-            data = list()
-            for str_line in f.readlines():
-                line = list()
-                for item in str_line.split(','):
-                    line.append(int(item.strip()))
-                data.append(line)
-            self.first = data[0]
-            self.second = data[1]
-            self.third = data[2]
+
+    def angle(self):
+        a = self.first
+        b = self.second
+        c = self.third
+        AB = (b[0]-a[0], b[1]-a[1])
+        AC = (c[0]-a[0], c[1]-a[1])
+        BA = (a[0]-b[0], a[1]-b[1])
+        BC = (c[0]-b[0], c[1]-b[1])
+        CA = (a[0]-c[0], a[1]-c[1])
+        CB = (b[0]-c[0], b[1]-c[1])
+        try:
+            ABAC = (AB[0] * AC[0] + AB[1] * AC[1]) /\
+                   (math.sqrt(AB[0] ** 2 + AB[1] ** 2) * math.sqrt(AC[0] ** 2 + AC[1] ** 2))
+        except ZeroDivisionError:
+            ABAC = 0
+        try:
+            BABC = (BA[0] * BC[0] + BA[1] * BC[1]) / \
+                   (math.sqrt(BA[0] ** 2 + BA[1] ** 2) * math.sqrt(BC[0] ** 2 + BC[1] ** 2))
+        except ZeroDivisionError:
+            BABC = 0
+        try:
+            CACB = (CA[0] * CB[0] + CA[1] * CB[1]) / \
+                   (math.sqrt(CA[0] ** 2 + CA[1] ** 2) * math.sqrt(CB[0] ** 2 + CB[1] ** 2))
+        except ZeroDivisionError:
+            CACB = 0
+        LABAC = math.acos(ABAC)*(180/math.pi)
+        LBABC = math.acos(BABC)*(180/math.pi)
+        LCACB = math.acos(CACB)*(180/math.pi)
+        if LABAC == 90.0:
+            print("Угол с координатами {} прямой".format(a))
+        elif LBABC == 90.0:
+            print("Угол с координатами {} прямой".format(b))
+        elif LCACB == 90.0:
+            print("Угол с координатами {} прямой".format(c))
+        else:
+            print("Прямых углов нет")
+
+
+def read_file(file_name):
+    with open(file_name, "r") as f:
+        data = list()
+        for str_line in f.readlines():
+            line = list()
+            for item in str_line.split(','):
+                line.append(int(item.strip()))
+            data.append(line)
+        return data
 
 
 def main():
-    tri = Triangle('1.txt')
-    tri.open_file()
+    data = read_file('1.txt')
+    tri = Triangle(data[0], data[1], data[2])
     tri.check_koor()
     tri.square()
-    print(tri.first, tri.second)
+    tri.angle()
+
 
 if __name__ == '__main__':
     main()
