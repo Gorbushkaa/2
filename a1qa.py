@@ -9,10 +9,9 @@ class Triangle(object):
         self.second = second
         self.third = third
 
-
     def square(self):
         s = 0.5 * ((self.first[0]-self.third[0])*(self.second[1]-self.third[1])-(self.second[0]-self.third[0])*(self.first[1]-self.third[1]))
-        print(abs(s))
+        print("Площадь треугольника = ", abs(s))
 
     def check_koor(self):
         dct = {}
@@ -21,8 +20,8 @@ class Triangle(object):
             dot = math.sqrt(int(value[0])*int(value[0]) + int(value[1])*int(value[1]))
             a = tuple(value)
             dct[a] = dot
-        print((sorted(dct.items(), key=itemgetter(1)))[0][0])
-
+        print("Ближайшая точка к началу координат ",
+              (sorted(dct.items(), key=itemgetter(1)))[0][0])
 
     def angle(self):
         a = self.first
@@ -67,11 +66,11 @@ def read_file(file_name):
         data = list()
         for str_line in f.readlines():
             line = list()
-            for items in str_line.split():
-                print(items)
-                line.append(items.strip())
+            for dot in str_line.split():
+                x, y = dot.split(',')
+                line.append((int(x.strip()), int(y.strip())))
             data.append(line)
-        print(data)
+
         return data
 
 
@@ -82,6 +81,7 @@ def main():
         tri.check_koor()
         tri.square()
         tri.angle()
+        print(" ")
 
 
 if __name__ == '__main__':
