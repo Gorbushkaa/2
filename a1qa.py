@@ -12,7 +12,7 @@ class Triangle(object):
 
     def square(self):
         s = 0.5 * ((self.first[0]-self.third[0])*(self.second[1]-self.third[1])-(self.second[0]-self.third[0])*(self.first[1]-self.third[1]))
-        print(s)
+        print(abs(s))
 
     def check_koor(self):
         dct = {}
@@ -67,18 +67,21 @@ def read_file(file_name):
         data = list()
         for str_line in f.readlines():
             line = list()
-            for item in str_line.split(','):
-                line.append(int(item.strip()))
+            for items in str_line.split():
+                print(items)
+                line.append(items.strip())
             data.append(line)
+        print(data)
         return data
 
 
 def main():
     data = read_file('1.txt')
-    tri = Triangle(data[0], data[1], data[2])
-    tri.check_koor()
-    tri.square()
-    tri.angle()
+    for triangle in data:
+        tri = Triangle(triangle[0], triangle[1], triangle[2])
+        tri.check_koor()
+        tri.square()
+        tri.angle()
 
 
 if __name__ == '__main__':
